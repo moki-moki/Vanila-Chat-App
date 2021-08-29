@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+</head>
+<body>
+        <div class="titleBox d-flex flex-column align-items-center position-relative">
+            <h1 class="title m-2"></h1>
+            <button type="button" class="btn btn-outline-light m-2"><a class="link-light" href="/">Leave room </a></button>
+            <div id='textContainer' class="w-75 overflow-auto border border-secondary bg-dark rounded textBox">
+            </div>
+            <form id='form' class="w-75" >
+                <input type="text" class=' w-100 messageInput rounded border-secondary p-3' placeholder="send a message" />
+            </form>
+        </div>
+        <div class="w-100  bg-light">
+            <h1>Online Users</h1>
+            <ul>
+                <li>Guy 1</li>
+            </ul>
+        </div>
+<script src="/socket.io/socket.io.js"></script>
+       <script src="/js/main.js"></script>
+</body>
+</html>
