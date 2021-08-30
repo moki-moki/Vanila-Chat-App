@@ -5,7 +5,12 @@ const socketio = require("socket.io");
 
 //utils
 const message = require("./utils/messages");
-const { userJoin, getCurrentUser } = require("./utils/users");
+const {
+  userJoin,
+  getCurrentUser,
+  getLeftUser,
+  getUsersRoom,
+} = require("./utils/users");
 
 const app = express();
 const server = http.createServer(app);
@@ -21,31 +26,48 @@ app.use(express.static(path.join(__dirname, "public")));
 const bot = "Bot";
 
 io.on("connection", (socket) => {
-  console.log("New ws connection");
-
   socket.on("joinRoom", ({ username, room }) => {
     const user = userJoin(socket.id, username, room);
 
     socket.join(user.room);
 
+    //welcoming msg
     socket.broadcast
       .to(user.room)
       .emit("message", message(bot, `${username}: has joined!`));
 
-    //welcoming msg
-    socket.emit("message", message(bot, "Welcome to the chat!"));
+    socket.emit("message", message(bot, `Welcome to ${room} chat room `));
+
+    //user and room info
+    io.to(user.room).emit("usersRoom", {
+      room: user.room,
+      users: getUsersRoom(user.room),
+    });
   });
 
   //message
   socket.on("chat message", (msg) => {
     const user = getCurrentUser(socket.id);
-    console.log(user);
 
     io.to(user.room).emit("chat message", message(user.username, msg));
   });
+
   //dc message
   socket.on("disconnect", () => {
-    io.emit("message", message(bot, "A user has left"));
+    const user = getLeftUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit(
+        "message",
+        message(bot, `${user.username} has left the chat`)
+      );
+
+      //getting room and users
+      io.to(user.room).emit("usersRoom", {
+        room: user.room,
+        users: getUsersRoom(user.room),
+      });
+    }
   });
 });
 
