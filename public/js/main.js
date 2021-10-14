@@ -1,4 +1,4 @@
-const socket = io("http://localhost:5000");
+const socket = io();
 
 const messageInput = document.querySelector(".messageInput");
 const form = document.getElementById("form");
